@@ -35,8 +35,10 @@ public class WorldRenderer {
 	float h;
 	float r;
 	int sprite_margin;
-
-	//WorldCacheRenderer worldCacheRenderer;
+	int previousMinCol = -1;
+	int previousMaxCol = -1;
+	int previousMinRow = -1;
+	int previousMaxRow = -1;
 	
 	public WorldRenderer(HexWorld worldParam)
 	{
@@ -44,7 +46,6 @@ public class WorldRenderer {
 		
 		// Init
         spriteBatch = new SpriteBatch();
-		//this.worldCacheRenderer = new WorldCacheRenderer(this.world);
 
 		// Load images
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/textures/textures.pack"));
@@ -59,7 +60,9 @@ public class WorldRenderer {
 	}
 	
 	 public void render() {
+		 	
 		 	spriteBatch.setProjectionMatrix(worldCam.combined);
+		 	
 			// Handle input of the camera
 			handleInput();
 			
@@ -76,21 +79,36 @@ public class WorldRenderer {
 			int min_row = (int) (min_pixel_y / rowCalcul);
 			int max_row = (int) (max_pixel_y / rowCalcul);
 			
-			for (int i = min_col; i < max_col; i++) {
-				for (int j = min_row; j < max_row; j++) {
-
-					if (j > 0 && j < world.getRows() && i > 0 && i < world.getCols())
-						renderHex(world.getHex(j, i));
-				}
+			updateLoadedHex(min_col,max_col,min_row,max_row);
+			for (Hex hex : this.world.getLoadedHexes()) {
+				renderHex(hex);
 			}
 			spriteBatch.end();
 			
 			
-			
-		 	//worldCacheRenderer.manageWorldCache(min_col, min_row, max_col-min_col, max_row-min_row);
-		 	//worldCacheRenderer.render();
 			fpsLogger.log();
 			worldCam.update();
+	 }
+	 
+	 public void updateLoadedHex(int minCol, int maxCol, int minRow, int maxRow)
+	 {
+		 if (previousMinCol == -1)
+		 {
+			 previousMinCol = minCol;
+			 previousMaxCol = maxCol;
+			 previousMinRow = minRow;
+			 previousMaxRow = maxRow;
+			 this.world.generateLoadHexes(minCol, maxCol, minRow, maxRow);
+		 }
+		 else if ((previousMinCol != minCol) || (previousMaxCol != maxCol) || (previousMinRow != minRow) || (previousMaxRow != maxRow))
+		 {
+			 this.world.generateLoadHexes(minCol, maxCol, minRow, maxRow);
+		 }
+
+		 previousMinCol = minCol;
+		 previousMaxCol = maxCol;
+		 previousMinRow = minRow;
+		 previousMaxRow = maxRow;
 	 }
 	 
 	 public void renderHex(Hex hex)
@@ -111,8 +129,6 @@ public class WorldRenderer {
 	        worldCam = new OrthographicCamera(VIEWPORT_WIDTH_UNITS * aspectRatio, VIEWPORT_HEIGHT_UNITS);
 	        worldCam.translate((VIEWPORT_WIDTH_UNITS * aspectRatio)/2, VIEWPORT_HEIGHT_UNITS/2, 0);
 	        
-	        //this.worldCacheRenderer.setCamera(worldCam);
-	        
 			inputProcessor = new WorldInputProcessor(worldCam);
 			Gdx.input.setInputProcessor(inputProcessor);
 	 }
@@ -120,7 +136,6 @@ public class WorldRenderer {
 	 public void dispose()
 	 {
 		 spriteBatch.dispose();
-		 //this.worldCacheRenderer.dispose();
 	 }
 	 
 	  private void handleInput() {

@@ -99,9 +99,9 @@ public class WorldCacheRenderer {
     	for (int row = hexCache.getStartRowIndice(); row < hexCache.getEndRowIndice(); row++) {
 			for (int col = hexCache.getStartcolIndice(); col < hexCache.getEndColIndice(); col++) {
 				// Get hex
-				Hex hex = world.getHex(row, col);
+				//Hex hex = world.getHex(row, col);
 				// Add to cache with good pixel position
-				addToCache(hex);
+				//addToCache(hex);
 			}
 		}
     		

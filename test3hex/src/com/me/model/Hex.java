@@ -27,6 +27,16 @@ public class Hex {
 		return (int)colArrayIndice;
 	}
 	
+	private Boolean isLoaded;
+	public Boolean getIsLoaded()
+	{
+		return isLoaded;
+	}
+	public void setIsLoaded(Boolean isLoadedParam)
+	{
+		this.isLoaded = isLoadedParam;
+	}
+	
 	// Init
 	public Hex(float hexX, float hexY, float side, int rowIndice, int columnIndice, float hexWidth, float hexHeight)
 	{
@@ -34,6 +44,7 @@ public class Hex {
 		this.y = hexY;
 		this.rowArrayIndice = rowIndice;
 		this.colArrayIndice = columnIndice;
+		this.isLoaded = true;
 	}
 	
 }

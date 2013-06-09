@@ -13,8 +13,8 @@ public class test3hex extends Game {
     private WorldRenderer worldRenderer;
 
 
-    static final int WORLD_WIDTH_UNITS  = 2048;
-    static final int WORLD_HEIGHT_UNITS = 2048;
+    static final int WORLD_WIDTH_UNITS  = 4096;
+    static final int WORLD_HEIGHT_UNITS = 4096;
     static final float HEX_SIDE_UNIT	= (float) 0.57735026919; // To have a unit to 1 ( cos(30)/0.50 )
     
 	@Override
@@ -22,7 +22,7 @@ public class test3hex extends Game {
 		
 		world = new HexWorld(WORLD_WIDTH_UNITS, WORLD_HEIGHT_UNITS, HEX_SIDE_UNIT);
 		worldRenderer = new WorldRenderer(world);
-		world.generateHexes();
+		world.tempGroundGeneration();
 	}
 
 	@Override
