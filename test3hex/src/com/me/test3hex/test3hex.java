@@ -13,8 +13,8 @@ public class test3hex extends Game {
     private WorldRenderer worldRenderer;
 
 
-    static final int WORLD_WIDTH_UNITS  = 500;
-    static final int WORLD_HEIGHT_UNITS = 500;
+    static final int WORLD_WIDTH_UNITS  = 2048;
+    static final int WORLD_HEIGHT_UNITS = 2048;
     static final float HEX_SIDE_UNIT	= (float) 0.57735026919; // To have a unit to 1 ( cos(30)/0.50 )
     
 	@Override

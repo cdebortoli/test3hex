@@ -23,8 +23,8 @@ public class WorldRenderer {
 	
 	// Cam values
     float rotationSpeed = 0.5f;
-    static final int VIEWPORT_WIDTH_UNITS  = 4;
-    static final int VIEWPORT_HEIGHT_UNITS = 4;
+    static final int VIEWPORT_WIDTH_UNITS  = 10;
+    static final int VIEWPORT_HEIGHT_UNITS = 10;
     
     // Rander objects
     private TextureRegion hexTextureEven = new TextureRegion();
@@ -35,6 +35,8 @@ public class WorldRenderer {
 	float h;
 	float r;
 	int sprite_margin;
+
+	//WorldCacheRenderer worldCacheRenderer;
 	
 	public WorldRenderer(HexWorld worldParam)
 	{
@@ -42,6 +44,7 @@ public class WorldRenderer {
 		
 		// Init
         spriteBatch = new SpriteBatch();
+		//this.worldCacheRenderer = new WorldCacheRenderer(this.world);
 
 		// Load images
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/textures/textures.pack"));
@@ -58,7 +61,7 @@ public class WorldRenderer {
 	 public void render() {
 		 	spriteBatch.setProjectionMatrix(worldCam.combined);
 			// Handle input of the camera
-			//handleInput();
+			handleInput();
 			
 			spriteBatch.begin();
 			
@@ -80,10 +83,12 @@ public class WorldRenderer {
 						renderHex(world.getHex(j, i));
 				}
 			}
-
-			
 			spriteBatch.end();
 			
+			
+			
+		 	//worldCacheRenderer.manageWorldCache(min_col, min_row, max_col-min_col, max_row-min_row);
+		 	//worldCacheRenderer.render();
 			fpsLogger.log();
 			worldCam.update();
 	 }
@@ -105,6 +110,9 @@ public class WorldRenderer {
 	        float aspectRatio = (float) width / (float) height;
 	        worldCam = new OrthographicCamera(VIEWPORT_WIDTH_UNITS * aspectRatio, VIEWPORT_HEIGHT_UNITS);
 	        worldCam.translate((VIEWPORT_WIDTH_UNITS * aspectRatio)/2, VIEWPORT_HEIGHT_UNITS/2, 0);
+	        
+	        //this.worldCacheRenderer.setCamera(worldCam);
+	        
 			inputProcessor = new WorldInputProcessor(worldCam);
 			Gdx.input.setInputProcessor(inputProcessor);
 	 }
@@ -112,40 +120,33 @@ public class WorldRenderer {
 	 public void dispose()
 	 {
 		 spriteBatch.dispose();
+		 //this.worldCacheRenderer.dispose();
 	 }
 	 
-//	  private void handleInput() {
-//	        if(Gdx.input.isKeyPressed(Input.Keys.A)) {
-//	        	if(worldCam.zoom < 1000)
-//	        		worldCam.zoom += 0.5;        
-//	        	Gdx.app.log("ZOOM", String.valueOf(worldCam.zoom));
-//	        }
-//	        if(Gdx.input.isKeyPressed(Input.Keys.Q)) {
-//	        	if(worldCam.zoom > 0.5)
-//	        		worldCam.zoom -= 0.5;
-//	        	Gdx.app.log("ZOOM", String.valueOf(worldCam.zoom));
-//	        }
-//	        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-//	                if (worldCam.position.x > 0 - 5)
-//	                	worldCam.translate(-1, 0, 0);
-//	        }
-//	        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-//	                if (worldCam.position.x <  world.getWidth() + 5)
-//	                	worldCam.translate(1, 0, 0);
-//	        }
-//	        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-//	                if (worldCam.position.y >  0 - 5)
-//	                	worldCam.translate(0, -1, 0);
-//	        }
-//	        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
-//	                if (worldCam.position.y <  world.getHeight() + 5)
-//	                	worldCam.translate(0, 1, 0);
-//	        }
-//	        if(Gdx.input.isKeyPressed(Input.Keys.Z)) {
-//	        	worldCam.rotate(-rotationSpeed, 0, 0, 1);
-//	        }
-//	        if(Gdx.input.isKeyPressed(Input.Keys.E)) {
-//	        	worldCam.rotate(rotationSpeed, 0, 0, 1);
-//	        }
-//	}
+	  private void handleInput() {
+	        if(Gdx.input.isKeyPressed(Input.Keys.A)) {
+	        	if(worldCam.zoom < 1000)
+	        		worldCam.zoom += 0.5;        
+	        }
+	        if(Gdx.input.isKeyPressed(Input.Keys.Q)) {
+	        	if(worldCam.zoom > 0.5)
+	        		worldCam.zoom -= 0.5;
+	        }
+	        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+	                if (worldCam.position.x > 0 - 5)
+	                	worldCam.translate(-1, 0, 0);
+	        }
+	        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+	                if (worldCam.position.x <  world.getWidth() + 5)
+	                	worldCam.translate(1, 0, 0);
+	        }
+	        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+	                if (worldCam.position.y >  0 - 5)
+	                	worldCam.translate(0, -1, 0);
+	        }
+	        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+	                if (worldCam.position.y <  world.getHeight() + 5)
+	                	worldCam.translate(0, 1, 0);
+	        }
+	}
 }
